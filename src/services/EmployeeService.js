@@ -48,6 +48,8 @@ export const updateEmployee = async (id, employee) => {
   if (!response.ok) {
     throw new Error("No se pudo actualizar el empleado");
   }
+
+  return response.json();
 };
 
 export const deleteEmployee = async (id) => {
