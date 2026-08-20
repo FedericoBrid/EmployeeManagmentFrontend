@@ -7,21 +7,22 @@ import {
 } from "@mui/material";
 import EmployeeForm from "./EmployeeForm";
 function CreateEmployeeDialog({ open, employee, onChange, onClose, onCreate }) {
-  <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-    <DialogTitle>Add Employee</DialogTitle>
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>Add Employee</DialogTitle>
 
-    <DialogContent>
-      <EmployeeForm employee={employee} onChange={onChange} />
-    </DialogContent>
+      <DialogContent>
+        <EmployeeForm employee={employee} onChange={onChange} />
+      </DialogContent>
 
-    <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
 
-      <Button variant="contained" color="success" onClick={onCreate}>
-        Create
-      </Button>
-    </DialogActions>
-  </Dialog>;
+        <Button variant="contained" color="success" onClick={onCreate}>
+          Create
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
-
 export default CreateEmployeeDialog;

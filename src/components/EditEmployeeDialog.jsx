@@ -6,21 +6,23 @@ import {
   DialogActions,
 } from "@mui/material";
 import EmployeeForm from "./EmployeeForm";
-function EditEmployeeDialog(onOpen, employee, onClose, onChange, onUpdate) {
-  <Dialog open={onOpen} onClose={onClose} fullWidth maxWidth="sm">
-    <DialogTitle>Edit Employee</DialogTitle>
+function EditEmployeeDialog({ open, employee, onChange, onClose, onUpdate }) {
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>Edit Employee</DialogTitle>
 
-    <DialogContent>
-      {employee && <EmployeeForm employee={employee} onChange={onChange} />}
-    </DialogContent>
+      <DialogContent>
+        {employee && <EmployeeForm employee={employee} onChange={onChange} />}
+      </DialogContent>
 
-    <DialogActions>
-      <Button onClick={onClose}>Cancel</Button>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
 
-      <Button variant="contained" onClick={onUpdate}>
-        Save
-      </Button>
-    </DialogActions>
-  </Dialog>;
+        <Button variant="contained" onClick={onUpdate}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
 export default EditEmployeeDialog;

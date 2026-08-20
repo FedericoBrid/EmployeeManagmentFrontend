@@ -1,102 +1,34 @@
-import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import {
-  getEmployees,
-  getEmployeeById,
-  createEmployee,
-  updateEmployee,
-  deleteEmployee,
-} from "../services/EmployeeService";
 import EmployeeTable from "./EmployeeTable";
 import CreateEmployeeDialog from "./CreateEmployeeDialog";
 import EditEmployeeDialog from "./EditEmployeeDialog";
+import { useState } from "react";
+import useEmployee from "../hooks/useEmployee";
 
 function EmployeeList() {
-  //employee vacio
-  const emptyEmployee = {
-    name: "",
-    surname: "",
-    email: "",
-    department: "",
-    employeeType: "",
-    gender: "",
-    phoneNumber: "",
-    status: "",
-  };
-  //Para obtener todos los employees
-  const [employees, setEmployees] = useState([]);
-  //para obtener un employee
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  //para abrir el formulario Dialog de MUI para el caso de editar
+  //Estos estados se quedan dentro del componente, porque manejan lógica de UI.
   const [openEdit, setOpenEdit] = useState(false);
-  //para abrir el formulario Dialog de MUI para el caso de crear
   const [openCreate, setOpenCreate] = useState(false);
-  //para crear un nuevo employee
-  const [newEmployee, setNewEmployee] = useState(emptyEmployee);
+  const {
+    employees,
+    selectedEmployee,
+    setSelectedEmployee,
+    newEmployee,
+    setNewEmployee,
+    handleDelete,
+    handleEdit,
+    handleUpdate,
+    handleCreate,
+    resetNewEmployee,
+    loading,
+  } = useEmployee();
 
-  const loadEmployees = async () => {
-    try {
-      const data = await getEmployees();
-      setEmployees(data);
-    } catch (error) {
-      console.error("Error fetching employees:", error);
-    }
-  };
-  useEffect(() => {
-    loadEmployees();
-  }, []);
+  const handleOpenEdit = async (id) => {
+    const employee = await handleEdit(id);
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteEmployee(id);
-      setEmployees((prevEmployees) =>
-        prevEmployees.filter((employee) => employee.id !== id),
-      );
-    } catch (error) {
-      console.error("Error deleting employee:", error);
-    }
-  };
-
-  const handleEdit = async (id) => {
-    try {
-      const employee = await getEmployeeById(id);
-      setSelectedEmployee(employee);
+    if (employee) {
       setOpenEdit(true);
-    } catch (error) {
-      console.error("Error fetching employee:", error);
     }
-  };
-
-  const handleUpdate = async () => {
-    try {
-      await updateEmployee(selectedEmployee.id, selectedEmployee);
-
-      setEmployees((prevEmployees) =>
-        prevEmployees.map((employee) =>
-          employee.id === selectedEmployee.id ? selectedEmployee : employee,
-        ),
-      );
-      setSelectedEmployee(null);
-      setOpenEdit(false);
-    } catch (error) {
-      console.error("Error updating employee:", error);
-    }
-  };
-
-  const handleCreate = async () => {
-    try {
-      const createdEmployee = await createEmployee(newEmployee);
-      setEmployees((prevEmployees) => [...prevEmployees, createdEmployee]);
-      setOpenCreate(false);
-      setNewEmployee(emptyEmployee);
-    } catch (error) {
-      console.error("Error creating employee:", error);
-    }
-  };
-
-  const handleOpenCreate = () => {
-    setNewEmployee(emptyEmployee);
-    setOpenCreate(true);
   };
 
   return (
@@ -105,29 +37,42 @@ function EmployeeList() {
         variant="contained"
         color="success"
         size="small"
-        onClick={handleOpenCreate}
+        onClick={() => {
+          resetNewEmployee();
+          setOpenCreate(true);
+        }}
         sx={{ marginBottom: 2 }}
       >
         Create
       </Button>
       <EmployeeTable
-        employee={employees}
-        onEdit={handleEdit}
+        employees={employees}
+        onEdit={handleOpenEdit}
         onDelete={handleDelete}
+        loading={loading}
       />
       <EditEmployeeDialog
-        onOpen={openEdit}
+        open={openEdit}
         employee={selectedEmployee}
-        onClose={() => setOpenCreate(false)}
+        onClose={() => {
+          setOpenEdit(false);
+          setSelectedEmployee(null);
+        }}
         onChange={setSelectedEmployee}
-        onUpdate={handleUpdate}
+        onUpdate={async () => {
+          await handleUpdate();
+          setOpenEdit(false);
+        }}
       />
       <CreateEmployeeDialog
         open={openCreate}
         employee={newEmployee}
         onChange={setNewEmployee}
         onClose={() => setOpenCreate(false)}
-        onCreate={handleCreate}
+        onCreate={async () => {
+          await handleCreate();
+          setOpenCreate(false);
+        }}
       />
     </>
   );
