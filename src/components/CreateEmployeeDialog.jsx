@@ -6,7 +6,14 @@ import {
   DialogActions,
 } from "@mui/material";
 import EmployeeForm from "./EmployeeForm";
-function CreateEmployeeDialog({ open, employee, onChange, onClose, onCreate }) {
+function CreateEmployeeDialog({
+  open,
+  employee,
+  onChange,
+  onClose,
+  onCreate,
+  loading,
+}) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Add Employee</DialogTitle>
@@ -18,8 +25,13 @@ function CreateEmployeeDialog({ open, employee, onChange, onClose, onCreate }) {
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
 
-        <Button variant="contained" color="success" onClick={onCreate}>
-          Create
+        <Button
+          variant="contained"
+          color="success"
+          onClick={onCreate}
+          disabled={loading}
+        >
+          {loading ? "Creating..." : "Create"}
         </Button>
       </DialogActions>
     </Dialog>

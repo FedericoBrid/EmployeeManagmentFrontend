@@ -6,7 +6,14 @@ import {
   DialogActions,
 } from "@mui/material";
 import EmployeeForm from "./EmployeeForm";
-function EditEmployeeDialog({ open, employee, onChange, onClose, onUpdate }) {
+function EditEmployeeDialog({
+  open,
+  employee,
+  onChange,
+  onClose,
+  onUpdate,
+  loading,
+}) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Edit Employee</DialogTitle>
@@ -18,8 +25,8 @@ function EditEmployeeDialog({ open, employee, onChange, onClose, onUpdate }) {
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
 
-        <Button variant="contained" onClick={onUpdate}>
-          Save
+        <Button variant="contained" onClick={onUpdate} disabled={loading}>
+          {loading ? "Saving..." : "Save"}
         </Button>
       </DialogActions>
     </Dialog>

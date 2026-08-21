@@ -27,6 +27,9 @@ function useEmployee() {
   const [newEmployee, setNewEmployee] = useState(emptyEmployee);
 
   const [loading, setLoading] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [error, setError] = useState(null);
 
   //traemos todos los employees
@@ -50,6 +53,7 @@ function useEmployee() {
   //Eliminar employee
   const handleDelete = async (id) => {
     try {
+      setDeletingId(id);
       await deleteEmployee(id);
       setEmployees((prevEmployees) =>
         prevEmployees.filter((employee) => employee.id !== id),
@@ -57,6 +61,8 @@ function useEmployee() {
     } catch (error) {
       console.error("Error deleting employee:", error);
       setError(error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -76,6 +82,7 @@ function useEmployee() {
   //Actualizamos employee
   const handleUpdate = async () => {
     try {
+      setUpdating(true);
       await updateEmployee(selectedEmployee.id, selectedEmployee);
 
       setEmployees((prevEmployees) =>
@@ -87,18 +94,23 @@ function useEmployee() {
     } catch (error) {
       console.error("Error updating employee:", error);
       setError(error);
+    } finally {
+      setUpdating(false);
     }
   };
 
   //Creamos employee
   const handleCreate = async () => {
     try {
+      setCreating(true);
       const createdEmployee = await createEmployee(newEmployee);
       setEmployees((prevEmployees) => [...prevEmployees, createdEmployee]);
       setNewEmployee(emptyEmployee);
     } catch (error) {
       console.error("Error creating employee:", error);
       setError(error);
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -124,6 +136,9 @@ function useEmployee() {
 
     loading,
     error,
+    creating,
+    updating,
+    deletingId,
   };
 }
 

@@ -21,6 +21,9 @@ function EmployeeList() {
     handleCreate,
     resetNewEmployee,
     loading,
+    creating,
+    updating,
+    deletingId,
   } = useEmployee();
 
   const handleOpenEdit = async (id) => {
@@ -50,6 +53,7 @@ function EmployeeList() {
         onEdit={handleOpenEdit}
         onDelete={handleDelete}
         loading={loading}
+        deletingId={deletingId}
       />
       <EditEmployeeDialog
         open={openEdit}
@@ -60,9 +64,12 @@ function EmployeeList() {
         }}
         onChange={setSelectedEmployee}
         onUpdate={async () => {
-          await handleUpdate();
-          setOpenEdit(false);
+          const success = await handleUpdate();
+          if (success) {
+            setOpenEdit(false);
+          }
         }}
+        loading={updating}
       />
       <CreateEmployeeDialog
         open={openCreate}
@@ -70,9 +77,13 @@ function EmployeeList() {
         onChange={setNewEmployee}
         onClose={() => setOpenCreate(false)}
         onCreate={async () => {
-          await handleCreate();
-          setOpenCreate(false);
+          const success = await handleCreate();
+
+          if (success) {
+            setOpenCreate(false);
+          }
         }}
+        loading={creating}
       />
     </>
   );

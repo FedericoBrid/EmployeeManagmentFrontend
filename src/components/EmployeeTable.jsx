@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 
-function EmployeeTable({ employees, onEdit, onDelete }) {
+function EmployeeTable({ employees, onEdit, onDelete, deletingId }) {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     { field: "name", headerName: "Name", width: 140 },
@@ -16,6 +16,7 @@ function EmployeeTable({ employees, onEdit, onDelete }) {
       headerName: "Actions",
       width: 160,
       renderCell: (params) => {
+        const isDeleting = deletingId === params.row.id;
         return (
           <>
             <Button
@@ -31,8 +32,9 @@ function EmployeeTable({ employees, onEdit, onDelete }) {
               color="error"
               size="small"
               onClick={() => onDelete(params.row.id)}
+              disabled={deletingId === params.row.id}
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </>
         );
