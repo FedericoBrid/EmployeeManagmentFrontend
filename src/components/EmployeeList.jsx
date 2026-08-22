@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import EmployeeTable from "./EmployeeTable";
 import CreateEmployeeDialog from "./CreateEmployeeDialog";
 import EditEmployeeDialog from "./EditEmployeeDialog";
@@ -26,6 +26,7 @@ function EmployeeList() {
     deletingId,
     errors,
     clearError,
+    error,
   } = useEmployee();
 
   const handleOpenEdit = async (id) => {
@@ -50,6 +51,7 @@ function EmployeeList() {
       >
         Create
       </Button>
+      {error && <Alert severity="error">{error}</Alert>}
       <EmployeeTable
         employees={employees}
         onEdit={handleOpenEdit}

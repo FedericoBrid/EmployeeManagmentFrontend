@@ -53,7 +53,13 @@ function useEmployee() {
       setEmployees(data);
     } catch (error) {
       console.error("Error fetching employees:", error);
-      setError(error);
+      if (!error.status) {
+        setError("Could not connect to the server.");
+      } else if (error.status === 500) {
+        setError("Internal server error.");
+      } else {
+        setError("Could not load employees.");
+      }
     } finally {
       setLoading(false);
     }
@@ -65,6 +71,7 @@ function useEmployee() {
   //Eliminar employee
   const handleDelete = async (id) => {
     try {
+      setError(null);
       setDeletingId(id);
       await deleteEmployee(id);
       setEmployees((prevEmployees) =>
@@ -87,6 +94,7 @@ function useEmployee() {
   //Traer employee para editar
   const handleEdit = async (id) => {
     try {
+      setError(null);
       const employee = await getEmployeeById(id);
       setSelectedEmployee(employee);
       return employee;
@@ -104,6 +112,7 @@ function useEmployee() {
   //Actualizamos employee
   const handleUpdate = async () => {
     try {
+      setError(null);
       if (!selectedEmployee) {
         return false;
       }
@@ -139,6 +148,7 @@ function useEmployee() {
   //Creamos employee
   const handleCreate = async () => {
     try {
+      setError(null);
       const validationErrors = validateEmployee(newEmployee);
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
