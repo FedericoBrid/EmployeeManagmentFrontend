@@ -17,13 +17,7 @@ function EditEmployeeDialog({
   onClearError,
 }) {
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      errors={errors}
-      fullWidth
-      maxWidth="sm"
-    >
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Edit Employee</DialogTitle>
 
       <DialogContent>
@@ -31,6 +25,7 @@ function EditEmployeeDialog({
           <EmployeeForm
             employee={employee}
             onChange={onChange}
+            errors={errors}
             onClearError={onClearError}
           />
         )}

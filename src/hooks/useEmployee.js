@@ -37,7 +37,7 @@ function useEmployee() {
   const [errors, setErrors] = useState({});
 
   const clearError = (field) => {
-    setError((prevErrors) => {
+    setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       delete newErrors[field];
       return newErrors;
@@ -94,6 +94,9 @@ function useEmployee() {
   //Actualizamos employee
   const handleUpdate = async () => {
     try {
+      if (!selectedEmployee) {
+        return false;
+      }
       const validationErrors = validateEmployee(selectedEmployee);
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
@@ -113,6 +116,7 @@ function useEmployee() {
     } catch (error) {
       console.error("Error updating employee:", error);
       setError(error);
+      return false;
     } finally {
       setUpdating(false);
     }
