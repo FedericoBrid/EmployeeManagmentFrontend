@@ -11,7 +11,7 @@ const fields = [
   { name: "status", label: "Status" },
 ];
 
-function EmployeeForm({ employee, onChange }) {
+function EmployeeForm({ employee, onChange, errors }) {
   const handleChange = (field) => (event) => {
     onChange({
       ...employee,
@@ -29,6 +29,8 @@ function EmployeeForm({ employee, onChange }) {
           label={field.label}
           value={employee[field.name] || ""}
           onChange={handleChange(field.name)}
+          error={!!errors[field.name]}
+          helperText={errors[field.name] || ""}
         />
       ))}
     </>

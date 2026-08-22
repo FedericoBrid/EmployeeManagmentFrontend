@@ -6,6 +6,7 @@ import {
   updateEmployee,
   deleteEmployee,
 } from "../services/EmployeeService";
+import { validateEmployee } from "../utils/employeeValidation";
 //employee vacio
 const emptyEmployee = {
   name: "",
@@ -30,7 +31,10 @@ function useEmployee() {
   const [creating, setCreating] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  //Esto es error de API
   const [error, setError] = useState(null);
+  //Estos son errores de validaciones
+  const [errors, setErrors] = useState({});
 
   //traemos todos los employees
   const loadEmployees = async () => {
@@ -82,6 +86,11 @@ function useEmployee() {
   //Actualizamos employee
   const handleUpdate = async () => {
     try {
+      const validationErrors = validateEmployee(selectedEmployee);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return false;
+      }
       setUpdating(true);
       await updateEmployee(selectedEmployee.id, selectedEmployee);
 
@@ -91,6 +100,8 @@ function useEmployee() {
         ),
       );
       setSelectedEmployee(null);
+      setErrors({});
+      return true;
     } catch (error) {
       console.error("Error updating employee:", error);
       setError(error);
@@ -102,10 +113,17 @@ function useEmployee() {
   //Creamos employee
   const handleCreate = async () => {
     try {
+      const validationErrors = validateEmployee(newEmployee);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return false;
+      }
       setCreating(true);
       const createdEmployee = await createEmployee(newEmployee);
       setEmployees((prevEmployees) => [...prevEmployees, createdEmployee]);
       setNewEmployee(emptyEmployee);
+      setErrors({});
+      return true;
     } catch (error) {
       console.error("Error creating employee:", error);
       setError(error);
@@ -139,6 +157,8 @@ function useEmployee() {
     creating,
     updating,
     deletingId,
+
+    errors,
   };
 }
 

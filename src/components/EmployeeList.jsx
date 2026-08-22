@@ -24,6 +24,7 @@ function EmployeeList() {
     creating,
     updating,
     deletingId,
+    errors,
   } = useEmployee();
 
   const handleOpenEdit = async (id) => {
@@ -63,6 +64,7 @@ function EmployeeList() {
           setSelectedEmployee(null);
         }}
         onChange={setSelectedEmployee}
+        errors={errors}
         onUpdate={async () => {
           const success = await handleUpdate();
           if (success) {
@@ -75,6 +77,7 @@ function EmployeeList() {
         open={openCreate}
         employee={newEmployee}
         onChange={setNewEmployee}
+        errors={errors}
         onClose={() => setOpenCreate(false)}
         onCreate={async () => {
           const success = await handleCreate();

@@ -13,9 +13,16 @@ function EditEmployeeDialog({
   onClose,
   onUpdate,
   loading,
+  errors,
 }) {
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      errors={errors}
+      fullWidth
+      maxWidth="sm"
+    >
       <DialogTitle>Edit Employee</DialogTitle>
 
       <DialogContent>
