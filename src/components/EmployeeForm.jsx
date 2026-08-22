@@ -11,12 +11,13 @@ const fields = [
   { name: "status", label: "Status" },
 ];
 
-function EmployeeForm({ employee, onChange, errors }) {
+function EmployeeForm({ employee, onChange, errors = {}, onClearError }) {
   const handleChange = (field) => (event) => {
     onChange({
       ...employee,
       [field]: event.target.value,
     });
+    onClearError(field);
   };
 
   return (

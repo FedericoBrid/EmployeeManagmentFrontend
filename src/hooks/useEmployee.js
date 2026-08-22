@@ -36,6 +36,14 @@ function useEmployee() {
   //Estos son errores de validaciones
   const [errors, setErrors] = useState({});
 
+  const clearError = (field) => {
+    setError((prevErrors) => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[field];
+      return newErrors;
+    });
+  };
+
   //traemos todos los employees
   const loadEmployees = async () => {
     try {
@@ -159,6 +167,7 @@ function useEmployee() {
     deletingId,
 
     errors,
+    clearError,
   };
 }
 

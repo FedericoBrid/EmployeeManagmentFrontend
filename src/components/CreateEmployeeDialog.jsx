@@ -14,13 +14,19 @@ function CreateEmployeeDialog({
   onCreate,
   loading,
   errors,
+  onClearError,
 }) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Add Employee</DialogTitle>
 
       <DialogContent>
-        <EmployeeForm employee={employee} onChange={onChange} errors={errors} />
+        <EmployeeForm
+          employee={employee}
+          onChange={onChange}
+          errors={errors}
+          onClearError={onClearError}
+        />
       </DialogContent>
 
       <DialogActions>

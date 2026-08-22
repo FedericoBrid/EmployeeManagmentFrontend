@@ -14,6 +14,7 @@ function EditEmployeeDialog({
   onUpdate,
   loading,
   errors,
+  onClearError,
 }) {
   return (
     <Dialog
@@ -26,7 +27,13 @@ function EditEmployeeDialog({
       <DialogTitle>Edit Employee</DialogTitle>
 
       <DialogContent>
-        {employee && <EmployeeForm employee={employee} onChange={onChange} />}
+        {employee && (
+          <EmployeeForm
+            employee={employee}
+            onChange={onChange}
+            onClearError={onClearError}
+          />
+        )}
       </DialogContent>
 
       <DialogActions>
