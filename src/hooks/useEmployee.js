@@ -72,7 +72,13 @@ function useEmployee() {
       );
     } catch (error) {
       console.error("Error deleting employee:", error);
-      setError(error);
+      if (error.status === 404) {
+        setError("Employee not found");
+      } else if (error.status === 500) {
+        setError("Internal server error");
+      } else {
+        setError("Could not delete employee");
+      }
     } finally {
       setDeletingId(null);
     }
@@ -86,7 +92,11 @@ function useEmployee() {
       return employee;
     } catch (error) {
       console.error("Error fetching employee:", error);
-      setError(error);
+      if (error.status === 404) {
+        setError("Employee not found");
+      } else {
+        setError("Could not load employee");
+      }
       return null;
     }
   };
@@ -115,7 +125,11 @@ function useEmployee() {
       return true;
     } catch (error) {
       console.error("Error updating employee:", error);
-      setError(error);
+      if (error.status === 400) {
+        setErrors(error.data);
+      } else {
+        setError(error);
+      }
       return false;
     } finally {
       setUpdating(false);
@@ -138,7 +152,11 @@ function useEmployee() {
       return true;
     } catch (error) {
       console.error("Error creating employee:", error);
-      setError(error);
+      if (error.status === 400) {
+        setErrors(error.data);
+      } else {
+        setError(error);
+      }
     } finally {
       setCreating(false);
     }

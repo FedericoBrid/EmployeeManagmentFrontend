@@ -14,7 +14,10 @@ export const getEmployeeById = async (id) => {
   const response = await fetch(`${API_URL}/${id}`);
 
   if (!response.ok) {
-    throw new Error("Error al obtener el empleado");
+    throw {
+      status: response.status,
+      message: "No se pudo obtener el empleado",
+    };
   }
 
   return response.json();
@@ -29,8 +32,12 @@ export const createEmployee = async (employee) => {
     body: JSON.stringify(employee),
   });
 
+  const data = await response.json();
   if (!response.ok) {
-    throw new Error("No se pudo crear el empleado");
+    throw {
+      status: response.status,
+      data,
+    };
   }
 
   return response.json();
@@ -45,8 +52,12 @@ export const updateEmployee = async (id, employee) => {
     body: JSON.stringify(employee),
   });
 
+  const data = await response.json();
   if (!response.ok) {
-    throw new Error("No se pudo actualizar el empleado");
+    throw {
+      status: response.status,
+      data,
+    };
   }
 
   return response.json();
@@ -58,6 +69,9 @@ export const deleteEmployee = async (id) => {
   });
 
   if (!response.ok) {
-    throw new Error("No se pudo eliminar el empleado");
+    throw {
+      status: response.status,
+      message: "No se pudo eliminar el empleado",
+    };
   }
 };
